@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="csvParser.DirectoryToListTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-11-27T22:44:41" hostname="DESKTOP-N2T8FBU" time="0.028">
+  <properties/>
+  <testcase name="listAllFiles()" classname="csvParser.DirectoryToListTest" time="0.028"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

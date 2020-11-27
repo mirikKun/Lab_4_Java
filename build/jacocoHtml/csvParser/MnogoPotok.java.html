@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MnogoPotok.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lab_4_java</a> &gt; <a href="index.source.html" class="el_package">csvParser</a> &gt; <span class="el_source">MnogoPotok.java</span></div><h1>MnogoPotok.java</h1><pre class="source lang-java linenums">package csvParser;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+<span class="fc" id="L12">public class MnogoPotok {</span>
+    public void process(int numberOfThreads, List&lt;String&gt; lines, String plus, char separator, String absolutePath) {
+<span class="fc" id="L14">        ExecutorService service = Executors.newFixedThreadPool(numberOfThreads);</span>
+<span class="fc" id="L15">        Formatter formatter = new Formatter();</span>
+<span class="fc" id="L16">        System.out.println(&quot;Р’СЂРµРјСЏ СЃС‚Р°СЂС‚Р°: &quot; + LocalDateTime.now());</span>
+<span class="fc" id="L17">        LocalDateTime start = LocalDateTime.now();</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        for (String line : lines) {</span>
+<span class="fc" id="L19">            service.execute(new ToThreats(line, plus, separator, absolutePath, formatter));</span>
+<span class="fc" id="L20">        }</span>
+<span class="fc" id="L21">        service.shutdown();</span>
+        try
+        {
+<span class="fc" id="L24">            service.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L26">        catch (InterruptedException e)</span>
+        {
+<span class="nc" id="L28">            e.printStackTrace();</span>
+<span class="fc" id="L29">        }</span>
+<span class="fc" id="L30">        System.out.println(&quot;\nР’СЂРµРјСЏ РѕРєРѕРЅС‡Р°РЅРёСЏ: &quot; + LocalDateTime.now()+'\n');</span>
+<span class="fc" id="L31">        System.out.println(&quot;Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РІ ms: &quot;);</span>
+<span class="fc" id="L32">        System.out.println(ChronoUnit.MILLIS.between(start, LocalDateTime.now()));</span>
+<span class="fc" id="L33">        System.out.println('\n');</span>
+<span class="fc" id="L34">    }</span>
+
+    public static class ToThreats implements Runnable {
+
+        String plus;
+        String line;
+        char separator;
+        String absolutePath;
+        Formatter formatter;
+
+<span class="fc" id="L44">        public ToThreats(String line, String plus, char separator, String absolutePath, Formatter formatter) {</span>
+<span class="fc" id="L45">            this.line = line;</span>
+<span class="fc" id="L46">            this.separator = separator;</span>
+<span class="fc" id="L47">            this.absolutePath = absolutePath;</span>
+<span class="fc" id="L48">            this.formatter = formatter;</span>
+<span class="fc" id="L49">            this.plus = plus;</span>
+<span class="fc" id="L50">        }</span>
+
+        @Override
+        public void run() {
+            try {
+<span class="fc" id="L55">                FileWriter fstream = new FileWriter(&quot;result.txt&quot;, true);</span>
+<span class="fc" id="L56">                BufferedWriter result = new BufferedWriter(fstream);</span>
+<span class="fc" id="L57">                result.write(formatter.format(Parser.parseLine(line, ',', '&quot;'), plus));</span>
+<span class="fc" id="L58">                result.close();</span>
+<span class="nc" id="L59">            } catch (Exception e) {</span>
+<span class="nc" id="L60">                System.err.println(&quot;Error while writing to file: &quot; +</span>
+<span class="nc" id="L61">                        e.getMessage());</span>
+<span class="fc" id="L62">            }</span>
+<span class="fc" id="L63">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
